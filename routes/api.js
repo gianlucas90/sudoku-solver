@@ -1,7 +1,6 @@
 'use strict';
 
 const SudokuSolver = require('../controllers/sudoku-solver.js');
-var solve = require('@mattflow/sudoku-solver');
 
 module.exports = function (app) {
   let solver = new SudokuSolver();
@@ -75,24 +74,12 @@ module.exports = function (app) {
     }
 
     // Find solution
-    let puzzleReformat = solver.changeString(puzzle);
-    // let puzzleReformat = solver.changeString(
-    //   '9.9..5.1.85.4....2432......1...69.83.9.....6.62.71...9......1945....4.37.4.3..6..'
-    // );
-    try {
-      let solution = solve(puzzleReformat);
-      return res.json({ solution });
-    } catch (error) {
-      if (error) return res.json({ error: 'Puzzle cannot be solved' });
-    }
-    // let solution = solve(puzzleReformat);
-    // console.log(solution);
+    let solution = solver.solve(puzzle);
 
-    // if (solution.error) {
-    //   return res.json({ error: 'Puzzle cannot be solved' });
-    // } else {
-    //   return res.json({ solution });
-    // }
+    if (solution) {
+      return res.json({ solution });
+    } else {
+      return res.json({ error: 'Puzzle cannot be solved' });
+    }
   });
 };
-// checkRegionPlacement(puzzleString, row, column, value) {

@@ -1,17 +1,6 @@
-var solve = require('@mattflow/sudoku-solver');
-
+var returnSol = require('@mattflow/sudoku-solver');
 class SudokuSolver {
   validate(puzzleString) {}
-
-  changeString(string) {
-    let solver = this;
-    if (!string.includes('.')) {
-      return string;
-    } else {
-      let newStr = string.replace('.', 0);
-      return solver.changeString(newStr);
-    }
-  }
 
   getRowFromCoordinates(coordinate) {
     const low = coordinate.toLowerCase();
@@ -154,84 +143,12 @@ class SudokuSolver {
   }
 
   solve(puzzleString) {
-    var checker = this;
-    // if (!puzzleString.includes('.') || !puzzleString.includes('10')) {
-    if (!puzzleString.includes('.')) {
-      return puzzleString;
-    } else {
-      console.log(puzzleString);
-
-      var index = puzzleString.indexOf('.');
-      let rowNum = solver.getRow(index);
-      let columnNum = solver.getColumn(index);
-
-      let value = 1;
-
-      while (
-        checker.checkRowPlacement(puzzleString, rowNum, columnNum, value) ||
-        checker.checkColPlacement(puzzleString, rowNum, columnNum, value) ||
-        checker.checkRegionPlacement(puzzleString, rowNum, columnNum, value)
-      ) {
-        value++;
-      }
-
-      let newPuzzleString;
-
-      if (value === 10) {
-        return;
-      } else {
-        newPuzzleString = puzzleString.replace('.', value);
-      }
-
-      this.solve(newPuzzleString);
-      return;
+    try {
+      let solution = returnSol(puzzleString, { emptyValue: '.' });
+      return solution;
+    } catch (error) {
+      if (error) return false;
     }
-  }
-
-  getRow(index) {
-    let row = 0;
-    index < 9
-      ? (row = 1)
-      : index < 18
-      ? (row = 2)
-      : index < 27
-      ? (row = 3)
-      : index < 36
-      ? (row = 4)
-      : index < 45
-      ? (row = 5)
-      : index < 54
-      ? (row = 6)
-      : index < 63
-      ? (row = 7)
-      : index < 72
-      ? (row = 8)
-      : (row = 9);
-    return row;
-  }
-
-  getColumn(index) {
-    let column = 0;
-
-    index % 9 === 0
-      ? (column = 1)
-      : (index - 1) % 9 === 0
-      ? (column = 2)
-      : (index - 2) % 9 === 0
-      ? (column = 3)
-      : (index - 3) % 9 === 0
-      ? (column = 4)
-      : (index - 4) % 9 === 0
-      ? (column = 5)
-      : (index - 5) % 9 === 0
-      ? (column = 6)
-      : (index - 6) % 9 === 0
-      ? (column = 7)
-      : (index - 7) % 9 === 0
-      ? (column = 8)
-      : (column = 9);
-
-    return column;
   }
 }
 
